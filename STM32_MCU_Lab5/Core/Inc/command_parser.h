@@ -22,6 +22,7 @@ enum CommandParserState {
 };
 
 /* Variables */
+extern uint8_t temp;
 
 /* Functions */
 void FSM_Command_Parser(void);

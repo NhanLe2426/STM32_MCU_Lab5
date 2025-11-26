@@ -27,5 +27,6 @@ enum CommandType {
 // extern enum CommandParserState CMD_status;
 extern enum CommandType command_data;
 extern uint8_t command_flag;
+extern uint8_t buffer_flag;
 
 #endif /* INC_GLOBAL_H_ */

@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "global.h"
+#include "uart.h"
+#include "command_parser.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,7 +59,7 @@ static void MX_ADC1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-
+void init_system(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -97,13 +99,23 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  init_system();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if (buffer_flag == 1) {
+		  FSM_Command_Parser();
+		  buffer_flag = 0;
+	  }
+	  FSM_UART_Communication();
+
+	  if (isTimerExpired(1) == 1) {
+		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+		  setTimer(1, 1000);
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -308,7 +320,21 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void init_system(void) {
+	setTimer(1, 1000);
+	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_ADC_Start(&hadc1);
+	HAL_UART_Receive_IT(&huart2, &temp, 1);
+	HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
+}
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	timerRun();
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+
+}
 /* USER CODE END 4 */
 
 /**

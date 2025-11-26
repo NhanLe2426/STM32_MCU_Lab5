@@ -12,3 +12,4 @@
 enum CommandType command_data = NONE;
 
 uint8_t command_flag = 0;
+uint8_t buffer_flag = 0;
