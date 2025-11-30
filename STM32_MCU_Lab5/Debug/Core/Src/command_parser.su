@@ -1,0 +1,2 @@
+../Core/Src/command_parser.c:24:6:get_message	16	static
+../Core/Src/command_parser.c:40:6:FSM_Command_Parser	4	static

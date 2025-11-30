@@ -25,6 +25,7 @@ enum CommandParserState {
 extern uint8_t temp;
 
 /* Functions */
+void get_message(UART_HandleTypeDef *huart);
 void FSM_Command_Parser(void);
 
 #endif /* INC_COMMAND_PARSER_H_ */

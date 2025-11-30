@@ -17,11 +17,11 @@ uint8_t index_buffer = 0;
 /* Functions */
 
 /**
- * @brief
+ * @brief	Put this function in HAL_UART_RxCpltCallback() in main.c
  * @param
- * @retval
+ * @retval	None
  */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+void get_message(UART_HandleTypeDef *huart) {
 	if (huart->Instance == USART2) {
 		buffer[index_buffer++] = temp;
 		if (index_buffer == MAX_BUFFER_SIZE) index_buffer = 0;
@@ -40,6 +40,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 void FSM_Command_Parser(void) {
 	switch (CMD_status) {
 	case CMD_WAIT:
+		// Change state to CMD_GET
 		if (temp == '!') {
 			index_buffer = 0;
 			CMD_status = CMD_GET;
@@ -47,6 +48,7 @@ void FSM_Command_Parser(void) {
 		break;
 
 	case CMD_GET:
+		// Change state to CMD_WAIT
 		if (temp == '#') {
 			if ((buffer[0] == 'R') && (buffer[1] == 'S') && (buffer[2] == 'T') && (buffer[3] == '#')) {
 				command_data = RST;
